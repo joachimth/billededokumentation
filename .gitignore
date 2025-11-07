@@ -66,3 +66,7 @@ Thumbs.db
 # billeder/*.jpg
 # billeder/*.jpeg
 # billeder/*.png
+
+# Web app uploads (temporary files)
+uploads/
+!uploads/.gitkeep

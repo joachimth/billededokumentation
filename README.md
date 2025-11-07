@@ -5,6 +5,25 @@ Et professionelt Python-værktøj til at generere fotodokumentationsrapporter i 
 ![Python Version](https://img.shields.io/badge/python-3.7+-blue.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 
+## 🌟 To versioner tilgængelige
+
+Dette projekt tilbyder to måder at generere fotodokumentation på:
+
+### 🖥️ **Kommandolinje version** (`app.py`)
+- Hurtig og simpel
+- Læser billeder fra en mappe
+- Genererer PDF automatisk
+- Ideel til batch processing og automation
+
+### 🌐 **Web version** (`app_web.py`) ⭐ **NYT!**
+- Moderne webinterface
+- Drag-and-drop upload
+- Omorganisér billeder visuelt
+- Tilføj beskrivelser interaktivt
+- Ideel til brugervenlig workflow
+
+➡️ **[Se komplet dokumentation for web-versionen](WEB_VERSION.md)**
+
 ## 📋 Indholdsfortegnelse
 
 - [Funktioner](#-funktioner)

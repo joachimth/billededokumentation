@@ -1,6 +1,8 @@
+Flask==3.0.0
 Pillow
 geopy==2.2.0
 piexif==1.1.3
 pikepdf
 fpdf2
 reportlab
+Werkzeug==3.0.1
