@@ -4,81 +4,86 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fotodokumentation Generator</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
     <div class="container">
-        <header>
+        <header class="header">
             <div class="header-content">
-                <i class="fas fa-camera-retro"></i>
-                <h1>Fotodokumentation Generator</h1>
+                <div class="logo-section">
+                    <i class="fas fa-camera logo-icon"></i>
+                    <h1>Fotodokumentation Generator</h1>
+                </div>
+                <div class="header-actions">
+                    <button id="clearAll" class="btn btn-secondary">
+                        <i class="fas fa-trash"></i> Ryd alle
+                    </button>
+                    <button id="generatePDF" class="btn btn-primary" disabled>
+                        <i class="fas fa-file-pdf"></i> Generer PDF
+                    </button>
+                </div>
             </div>
-            <p class="subtitle">Upload billeder, organisér dem og generer en professionel PDF-rapport</p>
         </header>
 
-        <main>
-            <!-- Upload Zone -->
-            <section class="upload-section">
-                <div class="upload-zone" id="uploadZone">
-                    <i class="fas fa-cloud-upload-alt"></i>
-                    <h2>Træk og slip billeder her</h2>
-                    <p>eller</p>
-                    <button class="btn btn-primary" onclick="document.getElementById('fileInput').click()">
-                        <i class="fas fa-folder-open"></i> Vælg filer
-                    </button>
-                    <input type="file" id="fileInput" multiple accept="image/*" style="display: none;">
-                    <p class="file-info">Understøtter: JPG, PNG, GIF, BMP (Max 16MB per fil)</p>
+        <main class="main-content">
+            <div class="upload-section">
+                <div id="uploadZone" class="upload-zone">
+                    <div class="upload-content">
+                        <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                        <h3>Upload dine billeder</h3>
+                        <p>Træk og slip billeder her eller klik for at vælge filer</p>
+                        <p class="upload-info">Understøttede formater: JPG, JPEG, PNG, GIF, BMP (Max 16MB per fil)</p>
+                        <input type="file" id="fileInput" multiple accept="image/*" style="display: none;">
+                        <button id="uploadBtn" class="btn btn-primary">Vælg filer</button>
+                    </div>
+                    <div id="uploadProgress" class="upload-progress" style="display: none;">
+                        <div class="progress-bar">
+                            <div id="progressBar" class="progress-fill"></div>
+                        </div>
+                        <p id="progressText">Uploader...</p>
+                    </div>
                 </div>
-            </section>
-
-            <!-- Progress Bar -->
-            <div class="progress-container" id="progressContainer" style="display: none;">
-                <div class="progress-bar">
-                    <div class="progress-fill" id="progressFill"></div>
-                </div>
-                <p class="progress-text" id="progressText">Uploader...</p>
             </div>
 
-            <!-- Images Grid -->
-            <section class="images-section" id="imagesSection" style="display: none;">
-                <div class="section-header">
-                    <h2><i class="fas fa-images"></i> Dine billeder (<span id="imageCount">0</span>)</h2>
-                    <p class="help-text">
-                        <i class="fas fa-info-circle"></i>
-                        Træk billeder for at ændre rækkefølge • Tilføj beskrivelser • Klik på billeder for at forstørre
-                    </p>
+            <div id="gallerySection" class="gallery-section" style="display: none;">
+                <div class="gallery-header">
+                    <h2>Uploadede billeder</h2>
+                    <div class="gallery-info">
+                        <span id="imageCount">0 billeder</span>
+                    </div>
                 </div>
-                <div class="images-grid" id="imagesGrid"></div>
-            </section>
+                
+                <div id="imageGallery" class="image-gallery">
+                    <!-- Billeder vil blive tilføjet her dynamisk -->
+                </div>
+            </div>
 
-            <!-- Action Buttons -->
-            <section class="actions-section" id="actionsSection" style="display: none;">
-                <button class="btn btn-success btn-large" id="generatePdfBtn">
-                    <i class="fas fa-file-pdf"></i> Generer PDF
-                </button>
-                <button class="btn btn-secondary" id="clearAllBtn">
-                    <i class="fas fa-trash-alt"></i> Ryd alle
-                </button>
-            </section>
+            <div id="pdfSection" class="pdf-section" style="display: none;">
+                <div class="pdf-content">
+                    <i class="fas fa-file-pdf pdf-icon"></i>
+                    <h3>PDF genereres...</h3>
+                    <p>Dette kan tage et øjeblik, især hvis du har uploadet mange billeder.</p>
+                </div>
+            </div>
         </main>
-
-        <footer>
-            <p>💡 <strong>Tip:</strong> PDF'en vil indeholde redigérbare tekstfelter, så du kan tilføje ekstra kommentarer efter generering</p>
-        </footer>
     </div>
 
-    <!-- Modal for image preview -->
-    <div class="modal" id="imageModal" style="display: none;">
+    <!-- Billede modal -->
+    <div id="imageModal" class="modal" style="display: none;">
         <div class="modal-content">
-            <span class="close" onclick="closeModal()">&times;</span>
-            <img id="modalImage" src="" alt="Preview">
+            <span class="modal-close">&times;</span>
+            <img id="modalImage" src="" alt="Billede">
         </div>
     </div>
 
     <!-- Toast notifications -->
-    <div id="toast" class="toast"></div>
+    <div id="toastContainer" class="toast-container"></div>
 
-    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <!-- Scripts -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
 </html>
